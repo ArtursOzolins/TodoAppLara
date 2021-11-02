@@ -9,7 +9,8 @@
 </head>
 <body>
     <h1>New task form:</h1>
-    <form method="post" action="{{ '/storeTask' }}">
+    <form method="post" action="{{ route('tasks.store') }}">
+        @csrf
         <p><label for="name">Enter task title:</label></p>
         <input id="name" type="text" name="title" placeholder="title">
 
