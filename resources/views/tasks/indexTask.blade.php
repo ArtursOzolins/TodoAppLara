@@ -13,9 +13,13 @@
                     @foreach($tasks as $task)
                         <ul>
                             <li>
-                                <h2>{{ $task->title }}</h2>
-                                <p>{{ $task->content }}</p>
-
+                                <form method="post" action="/tasks/{{ $task->id }}/completed">
+                                    @method('PATCH')
+                                    @csrf
+                                    <button type="submit">Press meee</button>
+                                </form>
+                                    <h2>{{ $task->title }}</h2>
+                                    <p>{{ $task->content }}</p>
                                 <a href="{{ route('tasks.edit', $task) }}">EDIT</a>
                                 <form method="post" action="{{ route('tasks.destroy', $task) }}">
                                     @method('DELETE')

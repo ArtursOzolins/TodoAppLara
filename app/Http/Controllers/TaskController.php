@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -22,11 +23,12 @@ class TaskController extends Controller
         return view('tasks/taskCreateForm');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         (new Task([
             'title' => $request->get('title'),
-            'content' => $request->get('content')
+            'content' => $request->get('content'),
+            'completed_at' => null
         ]))->save();
         return redirect()->route('tasks.index');
     }
@@ -41,7 +43,7 @@ class TaskController extends Controller
         return view('tasks/editTaskForm', ['task' => $task]);
     }
 
-    public function update(Request $request, Task $task)
+    public function update(Request $request, Task $task): RedirectResponse
     {
         $task->update([
             'title' => $request->get('title'),
@@ -50,9 +52,17 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function destroy(Task $task)
+    public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
         return redirect()->route('tasks.index');
+    }
+
+
+    public function changeStatus(Task $task): RedirectResponse
+    {
+        $task->toggleStatus();
+        $task->save();
+        return redirect()->back();
     }
 }

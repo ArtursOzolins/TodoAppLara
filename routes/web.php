@@ -21,6 +21,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+
 Route::resource('tasks', TaskController::class);
+
+Route::patch('/tasks/{task}/completed', [TaskController::class, 'changeStatus'])
+    ->middleware('auth')
+    ->name('tasks.changeStatus');
+
 
 require __DIR__.'/auth.php';
