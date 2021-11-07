@@ -21,6 +21,24 @@ Use a better box model (opinionated).
 Use a more readable tab size (opinionated).
 */
 
+table {
+        display: table;
+        padding: 5px;
+        }
+        .tr {
+        display: table-row;
+        padding: 5px;
+        }
+        .td {
+        display: table-cell;
+        padding: 5px;
+        width: 150px;
+        border: #000000 solid 1px;
+        margin: 5px;
+        text-align: center;
+        vertical-align: middle;
+        }
+
 html {
   -moz-tab-size: 4;
   -o-tab-size: 4;
@@ -526,14 +544,14 @@ samp {
  *    CSS Remedy, with `svg` added as well.
  *
  *    https://github.com/mozdevs/cssremedy/issues/14
- * 
+ *
  * 2. Add `vertical-align: middle` to align replaced elements more
  *    sensibly by default when overriding `display` by adding a
  *    utility like `inline`.
  *
  *    This can trigger a poorly considered linting error in some
  *    tools but is included by design.
- * 
+ *
  *    https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210
  */
 

@@ -28,5 +28,11 @@ Route::patch('/tasks/{task}/completed', [TaskController::class, 'changeStatus'])
     ->middleware('auth')
     ->name('tasks.changeStatus');
 
+Route::get('/recycled', [TaskController::class, 'recycleBin'])
+    ->name('tasks.recycleBin');
+
+Route::patch('/tasks/{task}/recycled', [TaskController::class, 'changeRecycle'])
+    ->middleware('auth')
+    ->name('tasks.changeRecycle');
 
 require __DIR__.'/auth.php';

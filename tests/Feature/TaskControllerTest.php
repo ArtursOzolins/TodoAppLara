@@ -16,6 +16,7 @@ class TaskControllerTest extends TestCase
 
     public function test_task_list_shows_data(): void
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -27,20 +28,28 @@ class TaskControllerTest extends TestCase
 
     public function test_ability_to_create_task()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'recycled' => 'no'
+        ]);
 
         $this->assertDatabaseHas('tasks', ['title' => $task->title]);
     }
 
     public function test_ability_to_edit_task()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'recycled' => 'no'
+        ]);
         $task2 = Task::factory()->make();
 
         $this->put('tasks.update', [$task, $task2]);
@@ -49,10 +58,14 @@ class TaskControllerTest extends TestCase
 
     public function test_ability_to_delete_task()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'recycled' => 'no'
+        ]);
 
         $task->delete();
         $this->assertDatabaseMissing('tasks', ['title' => $task->title]);
@@ -61,11 +74,15 @@ class TaskControllerTest extends TestCase
 
     public function test_ability_to_check_if_completed(): void
     {
-        /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
-        $user = User::factory()->make();
+        /** @var User $user */
+        $user = User::factory()->create();
         $this->actingAs($user);
 
-        $task = Task::factory()->create();
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'completed_at' => null,
+            'recycled' => 'no'
+        ]);
 
         $this->followingRedirects();
 
@@ -74,8 +91,30 @@ class TaskControllerTest extends TestCase
         $response->assertStatus(200);
         $this->assertDatabaseHas('tasks', [
            'id' => $task->id,
-           'completed_at' => now()
+           'completed_at' => now(),
+            'recycled' => 'no'
         ]);
     }
 
+    public function test_ability_to_set_recycled_status(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'recycled' => 'no'
+        ]);
+
+        $this->followingRedirects();
+
+        $response = $this->patch(route('tasks.changeRecycle', ['task' => $task]));
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'recycled' => 'yes'
+        ]);
+    }
 }

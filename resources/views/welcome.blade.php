@@ -16,21 +16,21 @@
     </style>
 </head>
 <body class="antialiased">
-
-<div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
     @if (Route::has('login'))
         <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+            <div class="mb-6 pt-3 rounded bg-green-600">
             @auth
-                <a href="{{ route('tasks.index') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Go to app</a>
+                    <a href="{{ route('tasks.index') }}" class="text-lg text-gray-700 dark:text-gray-500">Go to app</a>
             @else
-                <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+                    <a href="{{ route('login') }}" class="text-lg text-white dark:text-gray-500">Log in</a>
 
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+                        <a href="{{ route('register') }}" class="ml-4 text-lg text-white dark:text-gray-500">Register</a>
                 @endif
             @endauth
         </div>
+        </div>
     @endif
-</div>
+        <img src="https://wallpaperaccess.com/full/1489353.jpg" width="100%" height="100%" alt="Error loading picture">
 </body>
 </html>

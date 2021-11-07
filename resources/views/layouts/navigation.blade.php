@@ -18,8 +18,13 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link href="{{ route('tasks.index') }}">
-                        {{ __('Tasks') }}
+                        {{ __('Active Tasks') }}
                     </x-nav-link>
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link href="{{ route('tasks.recycleBin') }}">
+                            {{ __('Recycle bin') }}
+                        </x-nav-link>
+                    </div>
                 </div>
             </div>
 

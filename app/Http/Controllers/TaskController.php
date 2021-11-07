@@ -3,19 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
 
     public function index()
     {
-        return view('tasks/indexTask', ['tasks' => Task::all()]);
+        $tasks = auth()->user()->tasks()->paginate(10);
+        return view('tasks/indexTask', ['tasks' => $tasks]);
     }
 
     public function create()
@@ -25,11 +22,14 @@ class TaskController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        (new Task([
+        $task = (new Task([
             'title' => $request->get('title'),
             'content' => $request->get('content'),
-            'completed_at' => null
-        ]))->save();
+            'recycled' => 'no'
+        ]));
+
+        $task->user()->associate(auth()->user());
+        $task->save();
         return redirect()->route('tasks.index');
     }
 
@@ -62,6 +62,19 @@ class TaskController extends Controller
     public function changeStatus(Task $task): RedirectResponse
     {
         $task->toggleStatus();
+        $task->save();
+        return redirect()->back();
+    }
+
+    public function recycleBin()
+    {
+        $tasks = auth()->user()->tasks()->paginate(10);
+        return view('tasks/recycleBin', ['tasks' => $tasks]);
+    }
+
+    public function changeRecycle(Task $task): RedirectResponse
+    {
+        $task->toggleRecycle();
         $task->save();
         return redirect()->back();
     }
